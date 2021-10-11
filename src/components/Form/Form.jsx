@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FileBase from 'react-file-base64';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 import useStyles from './styles';
-import { createPost } from '../../redux/actions/postsActions'
+import { createPost, updatePost } from '../../redux/actions/postsActions'
 
-const Form = () => {
+const Form = ({ currentId, setCurrentId }) => {
+    const post = useSelector((state) => currentId
+        ? state.posts.find((post) => post._id === currentId)
+        : null);
+
     const [postData, setPostData] = useState({
         creator: '',
         title: '',
@@ -15,16 +20,34 @@ const Form = () => {
         selectedFile: ''
     });
 
+    useEffect(() => {
+        if (post) setPostData(post);
+    }, [post])
+
     const classes = useStyles();
     const dispatch = useDispatch()
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(createPost(postData))
+
+        if (currentId) {
+            dispatch(updatePost(currentId, postData))   
+        } else {
+            dispatch(createPost(postData))
+        }
+        clear()
+
     }
 
     const clear = () => {
-
+        setCurrentId(null);
+        setPostData({
+            creator: '',
+            title: '',
+            message: '',
+            tags: '',
+            selectedFile: ''
+        });
     }
 
     return (
@@ -36,7 +59,7 @@ const Form = () => {
                 autoComplete="off" noValidate
                 onSubmit={handleSubmit}>
                 <Typography variant="h6">
-                    Create a Memory
+                    {currentId ? 'Edit' : 'Create'} a Memory
                 </Typography>
                 <TextField name="creator"
                     variant="outlined"
