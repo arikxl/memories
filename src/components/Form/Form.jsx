@@ -21,7 +21,9 @@ const Form = ({ currentId, setCurrentId }) => {
     });
 
     useEffect(() => {
-        if (post) setPostData(post);
+        if (post){
+            setPostData(post);
+        } 
     }, [post])
 
     const classes = useStyles();
