@@ -1,52 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import {Container, AppBar, Typography, Grow, Grid} from '@material-ui/core';
+import React from 'react';
+import { Container } from '@material-ui/core';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import logo from './images/memories.png';
-import Form from './components/Form/Form';
-import Posts from './components/Posts/Posts';
-import  { getPosts } from './redux/actions/postsActions'
-
-import useStyles from './styles';
+import Navbar from './components/Navbar/Navbar';
+import Home from './components/Home/Home';
+import Auth from './components/Auth/Auth';
 
 function App() {
-  const [currentId , setCurrentId] = useState(null);
-  
-  const classes = useStyles();
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getPosts())
-  }, [currentId, dispatch]);
 
   return (
+    <BrowserRouter >
       <Container maxWidth="lg">
-        <AppBar className={classes.appBar}
-         position="static" color="inherit">
-          <Typography className={classes.heading}
-           variant="h3" align="center">
-            Memories
-            </Typography>
-          <img className={classes.image}
-           src={logo} alt="memories" height="60"/>
-        </AppBar>
-        <Grow in>
-            <Container>
-              <Grid className={classes.mainContainer} container 
-               justifyContent="space-between"
-                alignItems="stretch"
-                spacing={3}>
-                  <Grid item xs={12} sm={7}>
-                    <Posts setCurrentId={setCurrentId}/>
-                  </Grid>
-                  <Grid item xs={12} sm={4}>
-                    <Form currentId={currentId} setCurrentId={setCurrentId}/>
-                  </Grid>
-              </Grid>
-            </Container>
-        </Grow>
+        <Navbar />
+        <Switch>
+          <Route path = "/" exact component = {Home} />
+          <Route path = "/auth" exact component = {Auth} />
+        </Switch>
       </Container>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
