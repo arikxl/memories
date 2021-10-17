@@ -20,31 +20,39 @@ const Form = ({ currentId, setCurrentId }) => {
     });
 
     useEffect(() => {
-        if (post){
+        if (post) {
             setPostData(post);
-        } 
+        }
     }, [post])
 
     const classes = useStyles();
     const dispatch = useDispatch()
     const user = JSON.parse(localStorage.getItem('profile'));
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (currentId) {
-            dispatch(updatePost(currentId, {...postData, name: user?.result?.name}))   
+
+        if (!currentId) {
+            dispatch(createPost({ ...postData, name: user?.result?.name }));
         } else {
-            dispatch(createPost({...postData, name: user?.result?.name}))
+            dispatch(updatePost(currentId, {...postData,  name: user?.result?.name}));
         }
+
+        // if (currentId) {
+        //     dispatch(updatePost(currentId, {...postData, name: user?.result?.name}))  
+        //     console.log('test') 
+        // } else {
+        //     dispatch(createPost({...postData, name: user?.result?.name}))
+        // }
         clear()
 
-    }
+    };
 
     const clear = () => {
         setCurrentId(null);
         setPostData({
-           
+
             title: '',
             message: '',
             tags: '',
@@ -52,11 +60,11 @@ const Form = ({ currentId, setCurrentId }) => {
         });
     };
 
-    if(!user?.result?.name) {
+    if (!user?.result?.name) {
         return (
             <Paper className={classes.paper}>
                 <Typography variant="h6" align="center">
-                    Please sign in to create your own memories and like other's memories 
+                    Please sign in to create your own memories and like other's memories
                 </Typography>
             </Paper>
         )
