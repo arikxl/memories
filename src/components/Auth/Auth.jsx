@@ -5,9 +5,18 @@ import { GoogleLogin } from 'react-google-login';
 import { Avatar, Button, Paper, Typography, Grid, Container } from '@material-ui/core';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-import useStyles from './styles';
-import Input from './Input';
 import Icon from './icon';
+import Input from './Input';
+import useStyles from './styles';
+import  { signUp, signIn } from '../../redux/actions/authActions';
+
+const initialState = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+}
 
 const Auth = () => {
 
@@ -15,14 +24,21 @@ const Auth = () => {
     const history = useHistory();
     const [showPassword, setShowPassword] = useState(false)
     const [isSignUp, setIsSignUp] = useState(false);
+    const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    }
+        if (isSignUp) {
+            dispatch(signUp(formData, history))
+        } else {
+            dispatch(signIn(formData, history))
+        }
+    };
 
-    const handleChange = () => {
-
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
     const handleShowPassword = () => {
@@ -31,7 +47,7 @@ const Auth = () => {
 
     const switchMode = () => {
         setIsSignUp((prevIsSignUp) => !prevIsSignUp)
-        handleShowPassword(false);
+        setShowPassword(false);
     }
 
     const googleSuccess = async (res) => {
@@ -80,7 +96,6 @@ const Auth = () => {
                                 handleChange={handleChange} type="password" />
                         )}
                     </Grid>
-
                     <Button className={classes.submit} type="submit"
                         variant="contained" color="primary" fullWidth>
                         {isSignUp ? 'Sign Up' : 'Sign In'}
