@@ -4,7 +4,8 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppBar, Avatar, Button, Toolbar, Typography } from '@material-ui/core';
 
-import logo from '../../images/memories.png';
+import logo from '../../images/memories-Logo.png';
+import textLogo from '../../images/memories-Text.png';
 import useStyles from './styles';
 
 const Navbar = () => {
@@ -35,15 +36,11 @@ const Navbar = () => {
     return (
         <AppBar className={classes.appBar}
             position="static" color="inherit">
-            <div className={classes.brandContainer}>
-                <Typography className={classes.heading}
-                    component={Link} to="/"
-                    variant="h3" align="center">
-                    Memories
-                </Typography >
+            <Link to="/" className={classes.brandContainer}>
+                <img src={textLogo} alt="icon" height="45px" />
                 <img className={classes.image}
-                    src={logo} alt="memories" height="60" />
-            </div>
+                    src={logo} alt="memories" height="40" />
+            </Link>
             <Toolbar className={classes.toolbar}>
                 {user ? (
                     <div className={classes.profile}>

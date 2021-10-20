@@ -8,7 +8,7 @@ import Form from '../Form/Form'
 import Posts from '../Posts/Posts'
 import Paginate from '../Pagination/Pagination';
 import useStyles from './styles';
-import { getPosts } from '../../redux/actions/postsActions';
+import { getPosts, fetchPostsBySearch } from '../../redux/actions/postsActions';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -30,13 +30,13 @@ const Home = () => {
         dispatch(getPosts())
     }, [currentId, dispatch]);
 
-    const searchPost =() => {
-        if(searchWord.trim()) {
-
-        } else {
-            history.push('/');
-        }
-    }
+    const searchPost = () => {
+        // if (searchWord.trim()) {
+        //     dispatch(fetchPostsBySearch({ searchWord, tags: tags.join(',') }));
+        // } else {
+        //     history.push('/');
+        // }
+    };
 
     const handleKeyPress = (e) => {
         if (e.keyCode === 13) {
@@ -75,7 +75,7 @@ const Home = () => {
                             <Button className={classes.searchButton}
                                 color="primary" variant="contained"
                                 onClick={searchPost}>
-                                    Search
+                                Search
                             </Button>
                         </AppBar>
                         <Form currentId={currentId} setCurrentId={setCurrentId} />
