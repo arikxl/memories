@@ -8,7 +8,7 @@ import Form from '../Form/Form'
 import Posts from '../Posts/Posts'
 import Paginate from '../Pagination/Pagination';
 import useStyles from './styles';
-import { getPosts, fetchPostsBySearch } from '../../redux/actions/postsActions';
+import { getPosts, getPostsBySearch } from '../../redux/actions/postsActions';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -30,19 +30,25 @@ const Home = () => {
         dispatch(getPosts())
     }, [currentId, dispatch]);
 
-    const searchPost = () => {
-        // if (searchWord.trim()) {
-        //     dispatch(fetchPostsBySearch({ searchWord, tags: tags.join(',') }));
-        // } else {
-        //     history.push('/');
-        // }
-    };
 
     const handleKeyPress = (e) => {
-        if (e.keyCode === 13) {
+        if(e.keyCode === 13) {
+            console.log( e.target.value)
             searchPost();
         }
     };
+
+
+    const searchPost = () => {
+        if (searchWord.trim() || tags) {
+            dispatch(getPostsBySearch({ searchWord, tags: tags.join(',') }));
+
+        } else {
+            history.push('/');
+        }
+    };
+
+   
 
     const handleAdd = (tag) => setTags([...tags, tag]);
     const handleDelete = (tagToDelete) => setTags(tags.filter((tag) => tag !== tagToDelete));
@@ -63,7 +69,7 @@ const Home = () => {
                         <AppBar className={classes.appBarSearch}
                             position="static" color="inherit">
                             <TextField name="search" variant="outlined"
-                                label="search Memories" fullWidth
+                                label="Search Memories" fullWidth
                                 value={searchWord}
                                 onKeyPress={handleKeyPress}
                                 onChange={(e) => setSearchWord(e.target.value)} />
@@ -86,7 +92,7 @@ const Home = () => {
                 </Grid>
             </Container>
         </Grow>
-    )
+    );
 };
 
 export default Home;
