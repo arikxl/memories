@@ -31,22 +31,12 @@ const Form = ({ currentId, setCurrentId }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-
         if (!currentId) {
             dispatch(createPost({ ...postData, name: user?.result?.name }));
         } else {
             dispatch(updatePost(currentId, {...postData,  name: user?.result?.name}));
         }
-
-        // if (currentId) {
-        //     dispatch(updatePost(currentId, {...postData, name: user?.result?.name}))  
-        //     console.log('test') 
-        // } else {
-        //     dispatch(createPost({...postData, name: user?.result?.name}))
-        // }
         clear()
-
     };
 
     const clear = () => {
@@ -62,7 +52,7 @@ const Form = ({ currentId, setCurrentId }) => {
 
     if (!user?.result?.name) {
         return (
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} elevation={6}>
                 <Typography variant="h6" align="center">
                     Please sign in to create your own memories and like other's memories
                 </Typography>
@@ -71,9 +61,7 @@ const Form = ({ currentId, setCurrentId }) => {
     }
 
     return (
-        <Paper
-            className={classes.paper}
-        >
+        <Paper className={classes.paper} elevation={6}>
             <form
                 className={`${classes.root} ${classes.form}`}
                 autoComplete="off" noValidate
