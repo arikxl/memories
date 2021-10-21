@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ChipInput from 'material-ui-chip-input';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -8,7 +8,7 @@ import Form from '../Form/Form'
 import Posts from '../Posts/Posts'
 import Paginate from '../Pagination/Pagination';
 import useStyles from './styles';
-import { getPosts, getPostsBySearch } from '../../redux/actions/postsActions';
+import { getPostsBySearch } from '../../redux/actions/postsActions';
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
@@ -26,14 +26,8 @@ const Home = () => {
     const page = query.get('page') || 1;
     const searchQuery = query.get('searchQuery');
 
-    // useEffect(() => {
-    //     dispatch(getPosts())
-    // }, [currentId, dispatch]);
-
-
     const handleKeyPress = (e) => {
-        if (e.keyCode === 13) {
-            console.log(e.target.value)
+        if (e.charCode === 13) {
             searchPost();
         }
     };
@@ -73,8 +67,7 @@ const Home = () => {
                             <ChipInput style={{ margin: '10px 0' }} value={tags}
                                 label="Search Tags" variant="outlined"
                                 onAdd={handleAdd}
-                                onDelete={handleDelete}
-                            />
+                                onDelete={handleDelete}/>
                             <Button className={classes.searchButton}
                                 color="primary" variant="contained"
                                 onClick={searchPost}>
