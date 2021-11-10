@@ -17,7 +17,7 @@ export default (state = {isLoading: true, posts: []}, action) => {
         case FETCH_BY_SEARCH:
             return {...state, post: action.payload};    
         case FETCH_POST:
-            return {...state, posts: action.payload};    
+            return {...state, post: action.payload};    
         case CREATE:
             return {...state, posts: [...state.posts, action.payload]};
         case UPDATE:

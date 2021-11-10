@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -12,14 +12,29 @@ import useStyles from './styles';
 import { deletePost, likePost } from '../../../redux/actions/postsActions';
 
 const Post = ({ post, setCurrentId }) => {
+    const [likes, setLikes] = useState(post?.likes)
     const classes = useStyles();
     const history = useHistory();
     const dispatch = useDispatch();
     const user = JSON.parse(localStorage.getItem('profile'));
 
+    const userId = user?.result?.googleId || user?.result?._id;
+    const hasLikedPost = post.likes.filter((like) => like === userId);
+
+    const handleLike = async () => {
+        dispatch(likePost(post._id));
+
+        if(hasLikedPost){
+            setLikes(post.likes.filter((id) => id !== userId));
+        }else {
+            setLikes([...post.likes, userId])
+        }
+    }
+
+
     const Likes = () => {
         if (post.likes.length > 0) {
-            return post.likes.find((like) => like === (user?.result?.googleId || user?.result?._id))
+            return post.likes.find((like) => like === userId)
                 ? (
                     <>
                         <ThumbUpAltIcon fontSize="small" />
@@ -76,7 +91,7 @@ const Post = ({ post, setCurrentId }) => {
             <CardActions className={classes.cardActions}>
                 <Button size="small" color="primary"
                     disabled={!user?.result}
-                    onClick={() => dispatch(likePost(post._id))}>
+                    onClick={handleLike}>
                     <Likes />
                 </Button>
                 {(user?.result?.googleId === post?.creator || user?.result?._id === post?.creator) && (
